@@ -1,34 +1,30 @@
 {
-  "name": "@ecomplus/express-app-boilerplate",
+  "name": "@ecomplus/app-custom-shipping",
   "private": true,
-  "version": "0.1.1",
-  "description": "Boilerplate for E-Com Plus apps with Express",
-  "main": "app/main.js",
-  "scripts": {
-    "release": "standard-version"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ecomclub/express-app-boilerplate.git"
-  },
-  "keywords": [
-    "ecomplus",
-    "ecomplus-app",
-    "boilerplate",
-    "express-app",
-    "app-boilerplate"
-  ],
   "author": "E-Com Club <ti@e-com.club>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ecomclub/express-app-boilerplate/issues"
+  "version": "0.0.1",
+  "description": "E-Com Plus app for custom shipping calculation",
+  "main": "main.js",
+  "scripts": {
+    "test": "node ./main.js",
+    "release": "standard-version"
   },
-  "homepage": "https://github.com/ecomclub/express-app-boilerplate#readme",
+  "dependencies": {
+    "console-files": "2.x",
+    "ecomplus-app-sdk": "1.x",
+    "express": "4.x"
+  },
   "devDependencies": {
-    "@commitlint/cli": "^8.0.0",
-    "@commitlint/config-conventional": "^8.0.0",
-    "husky": "^2.4.1",
-    "standard": "^12.0.1",
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
+    "husky": "^3.0.9",
+    "standard": "^14.3.1",
     "standard-version": "^7.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
   }
 }

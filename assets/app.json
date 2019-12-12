@@ -1,17 +1,176 @@
 {
-  "app_id": 9000,
+  "app_id": 9008,
   "state": "active",
-  "title": "My Awesome E-Com Plus App",
-  "slug": "my-app",
+  "title": "Frete personalizado",
+  "slug": "customshipping",
   "version": "0.0.1",
   "type": "external",
   "authentication": true,
-  "auth_callback_uri": "https://my-app/ecom/auth-callback",
+  "auth_callback_uri": "https://customshipping.ecomplus.biz/ecom/auth-callback",
   "auth_scope": {
     "procedures": [
       "POST"
     ]
   },
+  "modules": {
+    "calculate_shipping": {
+      "endpoint": "https://customshipping.ecomplus.biz/ecom/modules/calculate-shipping"
+    }
+  },
   "admin_settings": {
+    "zip": {
+      "schema": {
+        "type": "string",
+        "maxLength": 9,
+        "pattern": "^[0-9]{5}-?[0-9]{3}$",
+        "title": "CEP de origem",
+        "description": "Código postal do remetente para cálculo do frete"
+      }
+    },
+    "services": {
+      "schema": {
+        "title": "Serviços de entrega personalizados",
+        "type": "array",
+        "maxItems": 50,
+        "items": {
+          "title": "Opção de serviço de entrega",
+          "type": "object",
+          "required": [
+            "service_code"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 50,
+              "title": "Rótulo",
+              "description": "Nome do serviço exibido aos clientes"
+            },
+            "service_code": {
+              "type": "string",
+              "maxLength": 9,
+              "pattern": "^[0-9]+$",
+              "title": "Código do serviço"
+            }
+          }
+        }
+      }
+    },
+    "posting_deadline": {
+      "schema": {
+        "title": "Prazo de postagem",
+        "type": "object",
+        "required": [
+          "days"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "days": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 999999,
+            "title": "Número de dias",
+            "description": "Dias de prazo para postar os produtos após a compra"
+          },
+          "working_days": {
+            "type": "boolean",
+            "default": true,
+            "title": "Dias úteis"
+          },
+          "after_approval": {
+            "type": "boolean",
+            "default": true,
+            "title": "Após aprovação do pagamento"
+          }
+        }
+      }
+    },
+    "additional_price": {
+      "schema": {
+        "type": "number",
+        "minimum": -999999,
+        "maximum": 999999,
+        "title": "Custo adicional",
+        "description": "Valor a adicionar (negativo para descontar) em todas as regras de frete personalizado"
+      }
+    },
+    "shipping_rules": {
+      "schema": {
+        "title": "Regras de envio",
+        "description": "Valor do frete e previsão de entrega condicionados",
+        "type": "array",
+        "maxItems": 1000,
+        "items": {
+          "title": "Regra de envio",
+          "type": "object",
+          "minProperties": 1,
+          "properties": {
+            "service_code": {
+              "type": "string",
+              "maxLength": 9,
+              "pattern": "^[0-9]+$",
+              "title": "Código do serviço"
+            },
+            "zip_range": {
+              "title": "Faixa de CEP",
+              "type": "object",
+              "required": [
+                "min",
+                "max"
+              ],
+              "properties": {
+                "min": {
+                  "type": "integer",
+                  "minimum": 10000,
+                  "maximum": 999999999,
+                  "title": "CEP inicial"
+                },
+                "max": {
+                  "type": "integer",
+                  "minimum": 10000,
+                  "maximum": 999999999,
+                  "title": "CEP final"
+                }
+              }
+            },
+            "min_amount": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 999999999,
+              "title": "Valor mínimo da compra"
+            },
+            "delivery_time": {
+              "title": "Prazo de entrega",
+              "type": "object",
+              "required": [
+                "days"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "days": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 999999,
+                  "title": "Número de dias",
+                  "description": "Tempo estimado para entrega após o despacho"
+                },
+                "working_days": {
+                  "type": "boolean",
+                  "default": true,
+                  "title": "Dias úteis",
+                  "description": "Se o prazo é calculado em dias úteis"
+                }
+              }
+            },
+            "total_price": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 9999999999,
+              "title": "Preço",
+              "description": "Valor total do frete com possíveis taxas e adicionais"
+            }
+          }
+        }
+      }
+    }
   }
 }

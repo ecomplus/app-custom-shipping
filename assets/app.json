@@ -24,7 +24,7 @@
         "maxLength": 9,
         "pattern": "^[0-9]{5}-?[0-9]{3}$",
         "title": "CEP de origem",
-        "description": "Código postal do remetente para cálculo do frete"
+        "description": "Código postal do remetente ou centro de distribuição"
       }
     },
     "services": {
@@ -102,7 +102,10 @@
         "items": {
           "title": "Regra de envio",
           "type": "object",
-          "minProperties": 1,
+          "required": [
+            "delivery_time",
+            "total_price"
+          ],
           "properties": {
             "service_code": {
               "type": "string",

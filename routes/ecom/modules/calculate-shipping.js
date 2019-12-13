@@ -13,17 +13,24 @@ module.exports = appSdk => {
     const response = {
       shipping_services: []
     }
+    let shippingRules
+    if (Array.isArray(config.shipping_rules) && config.shipping_rules.length) {
+      shippingRules = config.shipping_rules
+    } else {
+      // anything to do without shipping rules
+      res.send(response)
+      return
+    }
+
     // search for configured free shipping rule
-    if (Array.isArray(config.shipping_rules)) {
-      for (let i = 0; i < config.shipping_rules.length; i++) {
-        const rule = config.shipping_rules[i]
-        if (rule.free_shipping) {
-          if (!rule.min_amount) {
-            response.free_shipping_from_value = 0
-            break
-          } else if (!(response.free_shipping_from_value <= rule.min_amount)) {
-            response.free_shipping_from_value = rule.min_amount
-          }
+    for (let i = 0; i < shippingRules.length; i++) {
+      const rule = shippingRules[i]
+      if (rule.total_price === 0) {
+        if (!rule.min_amount) {
+          response.free_shipping_from_value = 0
+          break
+        } else if (!(response.free_shipping_from_value <= rule.min_amount)) {
+          response.free_shipping_from_value = rule.min_amount
         }
       }
     }
@@ -33,9 +40,11 @@ module.exports = appSdk => {
     if (!params.to) {
       // respond only with free shipping option
       res.send(response)
-    } else {
-      sCepDestino = params.to.zip
+      return
     }
+
+    const destinationZip = params.to.zip.replace(/\D/g, '')
+    let originZip
     if (!params.from) {
       if (!config.zip) {
         // must have configured origin zip code to continue
@@ -44,51 +53,32 @@ module.exports = appSdk => {
           message: 'Zip code is unset on app hidden data (merchant must configure the app)'
         })
       }
-      sCepOrigem = config.zip.replace(/\D/g, '')
+      originZip = config.zip.replace(/\D/g, '')
     } else {
-      sCepOrigem = params.from.zip.replace(/\D/g, '')
-    }
-
-    // optinal predefined or configured service codes
-    if (params.service_code) {
-      nCdServico = params.service_code
-    } else if (Array.isArray(config.services) && config.services[0]) {
-      nCdServico = config.services[0].service_code
-      for (let i = 1; i < config.services.length; i++) {
-        nCdServico += `,${config.services[i].service}`
-      }
-    }
-
-    // optional params to Correios services
-    if (params.subtotal) {
-      nVlValorDeclarado = params.subtotal
-    }
-    if (params.own_hand) {
-      sCdMaoPropria = 's'
-    }
-    if (params.receipt) {
-      sCdAvisoRecebimento = 's'
+      originZip = params.from.zip.replace(/\D/g, '')
     }
 
     // calculate weight and pkg value from items list
+    let amount = params.subtotal || 0
     if (params.items) {
       const sumDimensions = {}
+      let finalWeight = 0
       params.items.forEach(({ price, quantity, dimensions, weight }) => {
         if (!params.subtotal) {
-          nVlValorDeclarado += price * quantity
+          amount += price * quantity
         }
 
         // sum physical weight
         if (weight && weight.value) {
           switch (weight.unit) {
             case 'kg':
-              nVlPeso += weight.value
+              finalWeight += weight.value
               break
             case 'g':
-              nVlPeso += weight.value / 1000
+              finalWeight += weight.value / 1000
               break
             case 'mg':
-              nVlPeso += weight.value / 1000000
+              finalWeight += weight.value / 1000000
           }
         }
 
@@ -130,306 +120,68 @@ module.exports = appSdk => {
       }
       if (cubicWeight > 1) {
         cubicWeight /= 6000
-        if (cubicWeight > nVlPeso) {
+        if (cubicWeight > finalWeight) {
           // use cubic instead of phisic weight
-          nVlPeso = cubicWeight
+          finalWeight = cubicWeight
         }
       }
 
-      // send requests to both Correios offline and WS
-      const firstCalculateResult = new Promise(resolve => {
-        let countErrors = 0
-        let errorMsg
-        const handleErrors = err => {
-          countErrors++
-          errorMsg += `- ${err.message}`
-          if (countErrors === 2) {
-            // both WS and offline failed
-            return res.status(400).send({
-              error: 'CALCULATE_FAILED',
-              message: errorMsg
-            })
+      // start filtering shipping rules
+      const validShippingRules = shippingRules.filter(rule => Boolean(
+        rule &&
+        (!params.service_code || params.service_code === rule.service_code) &&
+        (!rule.zip_range ||
+          (rule.zip_range.min <= destinationZip && rule.zip_range.max >= destinationZip)) &&
+        !(rule.min_amount > amount) &&
+        !(finalWeight > rule.max_cubic_weight)
+      ))
+
+      if (validShippingRules.length) {
+        // group by service code selecting lower price
+        const shippingRulesByCode = validShippingRules.reduce((shippingRulesByCode, rule) => {
+          const serviceCode = rule.service_code
+          const currentShippingRule = shippingRulesByCode[serviceCode]
+          if (!currentShippingRule || currentShippingRule.total_price > rule.total_price) {
+            shippingRulesByCode[serviceCode] = rule
           }
-        }
+          return shippingRulesByCode
+        }, {})
 
-        // handle delay to send Correios offline request
-        // prefer Correios WS
-        let correiosOfflineTimer
-        correiosCalculate({
-          sCepOrigem,
-          sCepDestino,
-          nCdEmpresa,
-          sDsSenha,
-          nCdServico,
-          sCdMaoPropria,
-          sCdAvisoRecebimento,
-          nVlPeso,
-          nVlValorDeclarado
-        })
-          .then(result => {
-            clearTimeout(correiosOfflineTimer)
-            resolve(result)
-          })
-          .catch(handleErrors)
+        // parse final shipping rules object to shipping services array
+        for (const serviceCode in shippingRulesByCode) {
+          const rule = shippingRulesByCode[serviceCode]
+          if (rule) {
+            // delete filter properties from rule object
+            delete rule.service_code
+            delete rule.zip_range
+            delete rule.min_amount
+            delete rule.max_cubic_weight
+            // also try to find corresponding service object from config
+            let service
+            if (Array.isArray(config.services)) {
+              service = config.services.find(service => service.service_code === serviceCode)
+            }
 
-        if (!config.disable_correios_offline) {
-          const offlineListParams = {
-            sCepOrigem: nCdEmpresa ? sCepOrigem : findBaseZipCode(sCepOrigem),
-            sCepDestino: findBaseZipCode(sCepDestino),
-            nCdEmpresa,
-            // optinal predefined service code
-            Codigo: params.service_code
-          }
-
-          if (offlineListParams.sCepOrigem && offlineListParams.sCepDestino) {
-            // start timer to send Correios offline request
-            const correiosOfflineDelay = config.correios_offline_delay || 3000
-            correiosOfflineTimer = setTimeout(() => {
-              correiosOfflineClient.list(offlineListParams)
-
-                .then(results => {
-                  // filter results firts
-                  const validResults = results.filter(result => {
-                    if (nCdServico) {
-                      // check results service code
-                      const availableServiceCodes = nCdServico.split(',')
-                      if (availableServiceCodes.indexOf(result.Codigo) === -1) {
-                        // service not available
-                        return false
-                      }
-                    }
-                    // also removes results with low weight
-                    return result.nVlPeso >= nVlPeso
-                  })
-
-                  if (validResults.length) {
-                    // resolve with best result per service code only
-                    const cServico = validResults.reduce((bestResults, result) => {
-                      const index = bestResults.findIndex(({ Codigo }) => Codigo === result.Codigo)
-                      if (index > -1) {
-                        // keep lowest weight
-                        if (bestResults[index].nVlPeso > result.nVlPeso) {
-                          // overwrite result object
-                          bestResults[index] = result
-                        }
-                      } else {
-                        // any result for current service code yet
-                        // add new result object
-                        bestResults.push(result)
-                      }
-                      return bestResults
-                    }, [])
-                    resolve({ cServico, fromOffline: true })
-                  } else {
-                    handleErrors(new Error('Results from offline data invalidated'))
-                  }
-                })
-
-                .catch(handleErrors)
-            }, correiosOfflineDelay)
-          }
-        }
-      })
-
-      firstCalculateResult.then(({ Servicos, cServico, fromOffline }) => {
-        // set services array from `Servicos` or `cServico`
-        let services
-        if (Servicos) {
-          if (Array.isArray(Servicos)) {
-            services = Servicos
-          } else if (Servicos.cServico) {
-            services = Array.isArray(Servicos.cServico) ? Servicos.cServico : [Servicos.cServico]
-          }
-        }
-        if (!services) {
-          services = Array.isArray(cServico) ? cServico : [cServico]
-        }
-
-        if (services[0] && services[0].Codigo) {
-          let errorMsg
-          services.forEach(service => {
-            // check error first
-            const { Erro, MsgErro } = service
-
-            if (!Erro || Erro === '0') {
-              // fix price strings to number
-              ;[
-                'Valor',
-                'ValorSemAdicionais',
-                'ValorMaoPropria',
-                'ValorAvisoRecebimento',
-                'ValorValorDeclarado'
-              ].forEach(field => {
-                switch (typeof service[field]) {
-                  case 'number':
-                    break
-                  case 'string':
-                    service[field] = parseFloat(service[field].replace(',', '.'))
-                    break
-                  default:
-                    service[field] = 0
-                }
-              })
-              let {
-                Codigo,
-                Valor,
-                ValorSemAdicionais,
-                ValorMaoPropria,
-                ValorAvisoRecebimento,
-                ValorValorDeclarado,
-                PrazoEntrega
-              } = service
-
-              if (fromOffline) {
-                if (config.correios_offline_value_margin) {
-                  // percentual addition/discount for Correios offline results
-                  Valor *= (1 + config.correios_offline_value_margin / 100)
-                }
-                ValorSemAdicionais = Valor
-                // sum additional services to total value
-                if (nVlValorDeclarado) {
-                  // https://github.com/ecomclub/app-correios#about-correios-offline
-                  ValorValorDeclarado = (nVlValorDeclarado - 19.5) * 0.02
-                  Valor += ValorValorDeclarado
-                }
-                if (sCdMaoPropria) {
-                  ValorMaoPropria = config.own_hand_price || 7
-                  Valor += ValorMaoPropria
-                }
-                if (sCdAvisoRecebimento) {
-                  ValorAvisoRecebimento = config.receipt_price || 6
-                  Valor += ValorAvisoRecebimento
-                }
-              }
-
-              // find respective configured service label
-              let serviceName
-              switch (Codigo) {
-                case '04014':
-                  serviceName = 'SEDEX'
-                  break
-                case '04510':
-                  serviceName = 'PAC'
-              }
-              let label = serviceName || `Correios ${Codigo}`
-              if (Array.isArray(config.services)) {
-                for (let i = 0; i < config.services.length; i++) {
-                  const service = config.services[i]
-                  if (service && service.service_code === Codigo && service.label) {
-                    label = service.label
-                  }
-                }
-              }
-
-              // parse to E-Com Plus shipping line object
-              const shippingLine = {
+            response.shipping_services.push({
+              label: serviceCode,
+              // label, service_code, carrier (and maybe more) from service object
+              ...service,
+              shipping_line: {
                 from: {
                   ...params.from,
-                  zip: sCepOrigem
+                  zip: originZip
                 },
                 to: params.to,
-                price: ValorSemAdicionais || Valor,
-                declared_value: nVlValorDeclarado,
-                declared_value_price: ValorValorDeclarado || 0,
-                own_hand: Boolean(sCdMaoPropria),
-                own_hand_price: ValorMaoPropria,
-                receipt: Boolean(sCdAvisoRecebimento),
-                receipt_price: ValorAvisoRecebimento,
-                discount: 0,
-                total_price: Valor,
-                delivery_time: {
-                  days: parseInt(PrazoEntrega, 10),
-                  working_days: true
-                },
-                posting_deadline: {
-                  days: 3,
-                  ...config.posting_deadline
-                },
-                flags: [fromOffline ? 'correios-offline' : 'correios-ws']
+                // total_price, delivery_time (and maybe more) from rule object
+                ...rule
               }
-
-              // check for default configured additional/discount price
-              if (config.additional_price) {
-                if (config.additional_price > 0) {
-                  shippingLine.other_additionals = [{
-                    tag: 'additional_price',
-                    label: 'Adicional padrão',
-                    price: config.additional_price
-                  }]
-                } else {
-                  // negative additional price to apply discount
-                  shippingLine.discount -= config.additional_price
-                }
-                // update total price
-                shippingLine.total_price += config.additional_price
-              }
-
-              // search for discount by shipping rule
-              if (Array.isArray(config.shipping_rules)) {
-                for (let i = 0; i < config.shipping_rules.length; i++) {
-                  const rule = config.shipping_rules[i]
-                  if (
-                    rule &&
-                    (!rule.service_code || rule.service_code === Codigo) &&
-                    (!rule.zip_range ||
-                      (rule.zip_range.min <= sCepDestino && rule.zip_range.max >= sCepDestino)) &&
-                    !(rule.min_amount > nVlValorDeclarado)
-                  ) {
-                    // valid shipping rule
-                    if (rule.free_shipping) {
-                      shippingLine.discount += shippingLine.total_price
-                      shippingLine.total_price = 0
-                      break
-                    } else if (rule.discount) {
-                      let discountValue = rule.discount.value
-                      if (rule.discount.percentage) {
-                        discountValue *= (shippingLine.total_price / 100)
-                      }
-                      shippingLine.discount += discountValue
-                      shippingLine.total_price -= discountValue
-                      if (shippingLine.total_price < 0) {
-                        shippingLine.total_price = 0
-                      }
-                      break
-                    }
-                  }
-                }
-              }
-
-              // push shipping service object to response
-              response.shipping_services.push({
-                label,
-                carrier: 'Correios',
-                // https://informederendimentos.com/consulta/cnpj-correios/
-                carrier_doc_number: '34028316000103',
-                service_code: Codigo,
-                service_name: serviceName || label,
-                shipping_line: shippingLine
-              })
-            } else {
-              errorMsg = `Correios erro ${Erro}`
-              if (typeof MsgErro === 'string') {
-                errorMsg += `: ${MsgErro}`
-              }
-            }
-          })
-
-          return !response.shipping_services.length && errorMsg
-            // pass Correios error message
-            ? res.status(400).send({
-              error: 'CALCULATE_ERR_MSG',
-              message: errorMsg
             })
-            // success response with available shipping services
-            : res.send(response)
+          }
         }
-
-        // unexpected result object
-        res.status(500).send({
-          error: 'CALCULATE_UNEXPECTED_RSP',
-          message: 'Unexpected object from Correios response, please try again later'
-        })
-      })
+      }
     }
+
+    // expecting to have response with shipping services here
+    res.send(response)
   }
 }

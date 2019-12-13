@@ -45,6 +45,11 @@
               "title": "Rótulo",
               "description": "Nome do serviço exibido aos clientes"
             },
+            "carrier": {
+              "type": "string",
+              "maxLength": 200,
+              "title": "Transportadora"
+            },
             "service_code": {
               "type": "string",
               "maxLength": 9,
@@ -103,6 +108,7 @@
           "title": "Regra de envio",
           "type": "object",
           "required": [
+            "service_code",
             "delivery_time",
             "total_price"
           ],
@@ -140,6 +146,13 @@
               "minimum": 1,
               "maximum": 999999999,
               "title": "Valor mínimo da compra"
+            },
+            "max_cubic_weight": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 999999,
+              "title": "Peso máximo",
+              "description": "Peso cúbico ((C x L x A) / 6.000) máximo em Kg"
             },
             "delivery_time": {
               "title": "Prazo de entrega",

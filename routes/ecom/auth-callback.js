@@ -10,7 +10,7 @@ module.exports = appSdk => {
     // https://github.com/ecomclub/ecomplus-app-sdk
     appSdk.handleCallback(storeId, req.body)
 
-      .then(({ isNew, authenticationId }) => {
+      .then(() => {
         // authentication tokens were updated
         res.status(204)
         res.end()
@@ -22,7 +22,7 @@ module.exports = appSdk => {
           logger.error(err)
         }
         res.status(500)
-        let { message } = err
+        const { message } = err
         res.send({
           error: 'auth_callback_error',
           message

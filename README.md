@@ -18,3 +18,15 @@ Variable              | Value
 `DB_PATH`             | `~/app/db.sqlite`
 `ECOM_AUTH_DB`        | `~/app/db.sqlite`
 `ECOM_AUTH_UPDATE`    | `enabled`
+
+
+## Production server
+
+Published at https://customshipping.ecomplus.biz
+
+### Continuous deployment
+
+When new version is **production ready**,
+[create a new release](https://github.com/ecomclub/app-custom-shipping/releases)
+(or `npm run release`) to run automatic deploy from _master_ branch
+and (re)publish the app.

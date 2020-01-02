@@ -170,6 +170,9 @@ module.exports = appSdk => {
                   zip: originZip
                 },
                 to: params.to,
+                delivery_time: 20,
+                price: 0,
+                total_price: 0,
                 // total_price, delivery_time (and maybe more) from rule object
                 ...rule
               }

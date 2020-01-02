@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2](https://github.com/ecomclub/app-custom-shipping/compare/v0.1.1...v0.1.2) (2020-01-02)
+
+
+### Bug Fixes
+
+* **calculate-shipping:** ensure some rule fields aren't undefined ([36ea19c](https://github.com/ecomclub/app-custom-shipping/commit/36ea19c5be3ccdf9433f46790e5c6ca328728516))
+
 ### [0.1.1](https://github.com/ecomclub/app-custom-shipping/compare/v0.1.0...v0.1.1) (2019-12-19)
 
 

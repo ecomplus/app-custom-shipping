@@ -125,14 +125,17 @@ module.exports = appSdk => {
       })
 
       // start filtering shipping rules
-      const validShippingRules = shippingRules.filter(rule => Boolean(
-        rule &&
-        (!params.service_code || params.service_code === rule.service_code) &&
-        (!rule.zip_range ||
-          (rule.zip_range.min <= destinationZip && rule.zip_range.max >= destinationZip)) &&
-        !(rule.min_amount > amount) &&
-        !(finalWeight > rule.max_cubic_weight)
-      ))
+      const validShippingRules = shippingRules.filter(rule => {
+        if (typeof rule === 'object' && rule) {
+          const zipRange = rule.zip_range || {}
+          return (!params.service_code || params.service_code === rule.service_code) &&
+            (!zipRange.min || destinationZip >= zipRange.min) &&
+            (!zipRange.max || destinationZip <= zipRange.max) &&
+            (!rule.min_amount || amount >= rule.min_amount) &&
+            (!rule.max_cubic_weight || finalWeight <= rule.max_cubic_weight)
+        }
+        return false
+      })
 
       if (validShippingRules.length) {
         // group by service code selecting lower price

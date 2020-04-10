@@ -1,0 +1,8 @@
+{
+  "app": {
+    "title": "Frete personalizado",
+    "short_description": "Cálculo de frete com lista de valores e prazos personalizados",
+    "category": "shipping",
+    "icon": "https://market.e-com.plus/media/0xUmviGCPZdM.png"
+  }
+}

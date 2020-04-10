@@ -1,10 +1,10 @@
-# app-custom-shipping
+# App custom shipping
 
-[![license mit](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 E-Com Plus app for custom shipping calculation
 
-[Changelog](https://github.com/ecomclub/app-custom-shipping/blob/master/CHANGELOG.md)
+[CHANGELOG](https://github.com/ecomclub/app-custom-shipping/blob/master/CHANGELOG.md)
 
 ## Environment variables sample
 

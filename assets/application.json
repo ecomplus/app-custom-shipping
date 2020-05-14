@@ -182,7 +182,21 @@
               "minimum": 0,
               "maximum": 9999999999,
               "title": "Preço",
-              "description": "Valor total do frete com possíveis taxas e adicionais"
+              "description": "Valor do frete com possíveis taxas e adicionais fixos"
+            },
+            "excedent_weight_cost": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 99999999,
+              "title": "Custo por peso excedente",
+              "description": "Valor adicional variável por Kg (peso cúbico) excedente"
+            },
+            "amount_tax": {
+              "type": "number",
+              "minimum": -100,
+              "maximum": 100,
+              "title": "Taxa sobre o subtotal",
+              "description": "Adicional/desconto percentual sobre o valor subtotal da compra"
             }
           }
         }

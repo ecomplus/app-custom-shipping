@@ -25,7 +25,7 @@ module.exports = appSdk => {
     // search for configured free shipping rule
     for (let i = 0; i < shippingRules.length; i++) {
       const rule = shippingRules[i]
-      if (rule.total_price === 0) {
+      if (rule.total_price === 0 && !(rule.excedent_weight_cost > 0) && !(rule.amount_tax > 0)) {
         if (!rule.min_amount) {
           response.free_shipping_from_value = 0
           break
@@ -132,7 +132,7 @@ module.exports = appSdk => {
             (!zipRange.min || destinationZip >= zipRange.min) &&
             (!zipRange.max || destinationZip <= zipRange.max) &&
             (!rule.min_amount || amount >= rule.min_amount) &&
-            (!rule.max_cubic_weight || finalWeight <= rule.max_cubic_weight)
+            (!rule.max_cubic_weight || rule.excedent_weight_cost > 0 || finalWeight <= rule.max_cubic_weight)
         }
         return false
       })
@@ -140,6 +140,18 @@ module.exports = appSdk => {
       if (validShippingRules.length) {
         // group by service code selecting lower price
         const shippingRulesByCode = validShippingRules.reduce((shippingRulesByCode, rule) => {
+          if (typeof rule.total_price !== 'number') {
+            rule.total_price = 0
+          }
+          if (typeof rule.price !== 'number') {
+            rule.price = rule.total_price
+          }
+          if (rule.excedent_weight_cost > 0 && finalWeight > rule.max_cubic_weight) {
+            rule.total_price += (rule.excedent_weight_cost * (finalWeight - rule.max_cubic_weight))
+          }
+          if (typeof rule.amount_tax === 'number' && !isNaN(rule.amount_tax)) {
+            rule.total_price += (rule.amount_tax * amount)
+          }
           const serviceCode = rule.service_code
           const currentShippingRule = shippingRulesByCode[serviceCode]
           if (!currentShippingRule || currentShippingRule.total_price > rule.total_price) {
@@ -157,6 +169,8 @@ module.exports = appSdk => {
             delete rule.zip_range
             delete rule.min_amount
             delete rule.max_cubic_weight
+            delete rule.excedent_weight_cost
+            delete rule.amount_tax
             // also try to find corresponding service object from config
             let service
             if (Array.isArray(config.services)) {

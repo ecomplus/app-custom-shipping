@@ -150,7 +150,7 @@ module.exports = appSdk => {
             rule.total_price += (rule.excedent_weight_cost * (finalWeight - rule.max_cubic_weight))
           }
           if (typeof rule.amount_tax === 'number' && !isNaN(rule.amount_tax)) {
-            rule.total_price += (rule.amount_tax * amount)
+            rule.total_price += (rule.amount_tax * amount / 100)
           }
           const serviceCode = rule.service_code
           const currentShippingRule = shippingRulesByCode[serviceCode]

@@ -26,7 +26,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org/'
 
       - name: Install dependencies
-        run: npm i --only=dev
+        run: npm i
 
       - name: Run publish script
         env:

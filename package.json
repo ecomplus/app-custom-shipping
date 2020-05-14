@@ -12,8 +12,8 @@
     "publish:market": "node ./scripts/market-publication.js"
   },
   "dependencies": {
+    "@ecomplus/application-sdk": "^2.0.0-sqlite.1.12.3",
     "console-files": "2.x",
-    "ecomplus-app-sdk": "1.x",
     "express": "4.x"
   },
   "devDependencies": {
@@ -21,7 +21,7 @@
     "@commitlint/config-conventional": "^8.3.4",
     "dotenv": "^8.2.0",
     "husky": "^3.0.9",
-    "standard": "^14.3.3",
+    "standard": "^14.3.4",
     "standard-version": "^7.1.0"
   },
   "husky": {

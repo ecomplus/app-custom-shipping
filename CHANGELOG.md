@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.1](https://github.com/ecomplus/app-custom-shipping/compare/v1.1.0...v1.1.1) (2020-05-14)
+
+
+### Bug Fixes
+
+* import @ecomplus/application-sdk in place of ecomplus-app-sdk ([035dca8](https://github.com/ecomplus/app-custom-shipping/commit/035dca8a96abf4b0d022bc937ee1faa3e9622fd9))
+
 ## [1.1.0](https://github.com/ecomplus/app-custom-shipping/compare/v1.0.0...v1.1.0) (2020-05-14)
 
 

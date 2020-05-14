@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/ecomplus/app-custom-shipping/compare/v1.0.0...v1.1.0) (2020-05-14)
+
+
+### Features
+
+* **calculate-shipping:** handle 'excedent_weight_cost' & 'amount_tax' ([38a943a](https://github.com/ecomplus/app-custom-shipping/commit/38a943ace80b6f206cf7ba726f8f11dd577fd80f))
+
+
+### Bug Fixes
+
+* **caclulate-shipping:** fix calculating amount tax (percentage) ([7ce8da9](https://github.com/ecomplus/app-custom-shipping/commit/7ce8da912d3642a8dd994ba00f2c1f9c21db9144))
+* **deps:** replace ecomplus-app-sdk to @ecomplus/application-sdk@sqlite ([ba26529](https://github.com/ecomplus/app-custom-shipping/commit/ba26529d1e38b5de9c61ff911ec29ee5d90c7921))
+
 ## [1.0.0](https://github.com/ecomplus/app-custom-shipping/compare/v0.1.3...v1.0.0) (2020-04-10)
 
 ### [0.1.3](https://github.com/ecomplus/app-custom-shipping/compare/v0.1.2...v0.1.3) (2020-03-16)

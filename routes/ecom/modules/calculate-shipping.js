@@ -22,10 +22,29 @@ module.exports = appSdk => {
       return
     }
 
+    const destinationZip = params.to ? params.to.zip.replace(/\D/g, '') : ''
+    const originZip = params.from ? params.from.zip.replace(/\D/g, '')
+      : config.zip ? config.zip.replace(/\D/g, '') : ''
+
+    const checkZipCode = rule => {
+      // validate rule zip range
+      if (destinationZip && rule.zip_range) {
+        const { min, max } = rule.zip_range
+        return Boolean((!min || destinationZip >= min) && (!max || destinationZip <= max))
+      }
+      return true
+    }
+
     // search for configured free shipping rule
     for (let i = 0; i < shippingRules.length; i++) {
       const rule = shippingRules[i]
-      if (rule.total_price === 0 && !(rule.excedent_weight_cost > 0) && !(rule.amount_tax > 0)) {
+      if (
+        checkZipCode(rule) &&
+        rule.total_price === 0 &&
+        !rule.skip_free_shipping_from &&
+        !(rule.excedent_weight_cost > 0) &&
+        !(rule.amount_tax > 0)
+      ) {
         if (!rule.min_amount) {
           response.free_shipping_from_value = 0
           break
@@ -43,19 +62,12 @@ module.exports = appSdk => {
       return
     }
 
-    const destinationZip = params.to.zip.replace(/\D/g, '')
-    let originZip
-    if (!params.from) {
-      if (!config.zip) {
-        // must have configured origin zip code to continue
-        return res.status(400).send({
-          error: 'CALCULATE_ERR',
-          message: 'Zip code is unset on app hidden data (merchant must configure the app)'
-        })
-      }
-      originZip = config.zip.replace(/\D/g, '')
-    } else {
-      originZip = params.from.zip.replace(/\D/g, '')
+    if (!originZip) {
+      // must have configured origin zip code to continue
+      return res.status(400).send({
+        error: 'CALCULATE_ERR',
+        message: 'Zip code is unset on app hidden data (merchant must configure the app)'
+      })
     }
 
     // calculate weight and pkg value from items list
@@ -127,10 +139,8 @@ module.exports = appSdk => {
       // start filtering shipping rules
       const validShippingRules = shippingRules.filter(rule => {
         if (typeof rule === 'object' && rule) {
-          const zipRange = rule.zip_range || {}
           return (!params.service_code || params.service_code === rule.service_code) &&
-            (!zipRange.min || destinationZip >= zipRange.min) &&
-            (!zipRange.max || destinationZip <= zipRange.max) &&
+            checkZipCode(rule) &&
             (!rule.min_amount || amount >= rule.min_amount) &&
             (!rule.max_cubic_weight || rule.excedent_weight_cost > 0 || finalWeight <= rule.max_cubic_weight)
         }

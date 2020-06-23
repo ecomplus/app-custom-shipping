@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/ecomplus/app-custom-shipping/compare/v1.1.1...v1.2.0) (2020-06-23)
+
+
+### Features
+
+* **calculate-shipping:** add 'disable_free_shipping_from' rule option ([1558ffa](https://github.com/ecomplus/app-custom-shipping/commit/1558ffaff830f11d6df480fcb54548dc7ab10e14))
+
+
+### Bug Fixes
+
+* **calculate-shipping:** validate zip for 'free_shipping_from_value' ([ae1a6dc](https://github.com/ecomplus/app-custom-shipping/commit/ae1a6dc6fb67ea5116220f00c9b660fe0d12d1e0))
+
 ### [1.1.1](https://github.com/ecomplus/app-custom-shipping/compare/v1.1.0...v1.1.1) (2020-05-14)
 
 

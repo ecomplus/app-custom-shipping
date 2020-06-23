@@ -41,7 +41,7 @@ module.exports = appSdk => {
       if (
         checkZipCode(rule) &&
         rule.total_price === 0 &&
-        !rule.skip_free_shipping_from &&
+        !rule.disable_free_shipping_from &&
         !(rule.excedent_weight_cost > 0) &&
         !(rule.amount_tax > 0)
       ) {

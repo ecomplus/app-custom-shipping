@@ -184,6 +184,12 @@
               "title": "Preço",
               "description": "Valor do frete com possíveis taxas e adicionais fixos"
             },
+            "disable_free_shipping_from": {
+              "type": "boolean",
+              "default": false,
+              "title": "Não informar frete grátis",
+              "description": "Desabilita esta regra nas mensagens \"frete grátis a partir\""
+            },
             "excedent_weight_cost": {
               "type": "number",
               "minimum": 0,

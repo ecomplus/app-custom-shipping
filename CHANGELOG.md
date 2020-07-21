@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.1](https://github.com/ecomplus/app-custom-shipping/compare/v1.2.0...v1.2.1) (2020-07-21)
+
+
+### Bug Fixes
+
+* **calculate-shipping:** undefied total price gives free shipping ([e50e3d6](https://github.com/ecomplus/app-custom-shipping/commit/e50e3d6e4b42e36d70fd5a06ef023263e33aa51b))
+
 ## [1.2.0](https://github.com/ecomplus/app-custom-shipping/compare/v1.1.1...v1.2.0) (2020-06-23)
 
 

@@ -40,7 +40,7 @@ module.exports = appSdk => {
       const rule = shippingRules[i]
       if (
         checkZipCode(rule) &&
-        rule.total_price === 0 &&
+        !rule.total_price &&
         !rule.disable_free_shipping_from &&
         !(rule.excedent_weight_cost > 0) &&
         !(rule.amount_tax > 0)

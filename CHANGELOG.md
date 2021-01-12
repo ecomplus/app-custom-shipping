@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.2](https://github.com/ecomplus/app-custom-shipping/compare/v1.2.1...v1.2.2) (2021-01-12)
+
+
+### Bug Fixes
+
+* **calculate-shipping:** fix setting `delivery_time` and `posting_deadline` on shipping lines ([17f30a3](https://github.com/ecomplus/app-custom-shipping/commit/17f30a39649664629787af011cae6b2c802f0279))
+
 ### [1.2.1](https://github.com/ecomplus/app-custom-shipping/compare/v1.2.0...v1.2.1) (2020-07-21)
 
 

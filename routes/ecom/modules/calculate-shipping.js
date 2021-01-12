@@ -197,11 +197,19 @@ module.exports = appSdk => {
                   zip: originZip
                 },
                 to: params.to,
-                delivery_time: 20,
                 price: 0,
                 total_price: 0,
-                // total_price, delivery_time (and maybe more) from rule object
-                ...rule
+                // price, total_price (and maybe more) from rule object
+                ...rule,
+                delivery_time: {
+                  days: 20,
+                  working_days: true,
+                  ...rule.delivery_time
+                },
+                posting_deadline: {
+                  days: 0,
+                  ...config.posting_deadline
+                }
               }
             })
           }

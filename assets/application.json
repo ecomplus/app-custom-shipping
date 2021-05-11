@@ -166,6 +166,7 @@
                   "type": "integer",
                   "minimum": 0,
                   "maximum": 999999,
+                  "default": 20,
                   "title": "Número de dias",
                   "description": "Tempo estimado para entrega após o despacho"
                 },

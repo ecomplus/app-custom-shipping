@@ -14,7 +14,8 @@
   },
   "modules": {
     "calculate_shipping": {
-      "endpoint": "https://customshipping.ecomplus.biz/ecom/modules/calculate-shipping"
+      "endpoint": "https://customshipping.ecomplus.biz/ecom/modules/calculate-shipping",
+      "enabled": true
     }
   },
   "admin_settings": {

@@ -26,7 +26,8 @@
         "pattern": "^[0-9]{5}-?[0-9]{3}$",
         "title": "CEP de origem",
         "description": "Código postal do remetente ou centro de distribuição"
-      }
+      },
+      "hide": true
     },
     "services": {
       "schema": {
@@ -59,7 +60,8 @@
             }
           }
         }
-      }
+      },
+      "hide": true
     },
     "posting_deadline": {
       "schema": {
@@ -88,7 +90,8 @@
             "title": "Após aprovação do pagamento"
           }
         }
-      }
+      },
+      "hide": true
     },
     "additional_price": {
       "schema": {
@@ -97,7 +100,8 @@
         "maximum": 999999,
         "title": "Custo adicional",
         "description": "Valor a adicionar (negativo para descontar) em todas as regras de frete personalizado"
-      }
+      },
+      "hide": true
     },
     "shipping_rules": {
       "schema": {
@@ -208,7 +212,8 @@
             }
           }
         }
-      }
+      },
+      "hide": true
     }
   }
 }

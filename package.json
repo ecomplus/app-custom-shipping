@@ -12,17 +12,17 @@
     "publish:market": "node ./scripts/market-publication.js"
   },
   "dependencies": {
-    "@ecomplus/application-sdk": "^2.0.0-sqlite.1.12.3",
+    "@ecomplus/application-sdk": "^11.0.0-sqlite.1.14.11",
     "console-files": "2.x",
     "express": "4.x"
   },
   "devDependencies": {
-    "@commitlint/cli": "^11.0.0",
-    "@commitlint/config-conventional": "^11.0.0",
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
     "dotenv": "^8.6.0",
-    "husky": "^3.0.9",
-    "standard": "^14.3.4",
-    "standard-version": "^8.0.1"
+    "husky": "^4.3.8",
+    "standard": "^16.0.3",
+    "standard-version": "^9.3.0"
   },
   "husky": {
     "hooks": {

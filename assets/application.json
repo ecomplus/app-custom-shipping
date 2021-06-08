@@ -106,7 +106,7 @@
     "shipping_rules": {
       "schema": {
         "title": "Regras de envio",
-        "description": "Valor do frete e previsão de entrega condicionados (tabela exemplo https://bit.ly/34ZhqVg)",
+        "description": "Valor do frete e previsão de entrega condicionados (tabela exemplo https://bit.ly/34ZhqVg )",
         "type": "array",
         "maxItems": 1000,
         "items": {

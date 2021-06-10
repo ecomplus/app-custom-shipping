@@ -125,7 +125,7 @@
               "title": "Código do serviço"
             },
             "zip_range": {
-              "title": "Faixa de CEP",
+              "title": "Faixa de CEP atendida",
               "type": "object",
               "required": [
                 "min",

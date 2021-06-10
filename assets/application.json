@@ -172,8 +172,8 @@
                   "minimum": 0,
                   "maximum": 999999,
                   "default": 20,
-                  "title": "Número de dias",
-                  "description": "Tempo estimado para entrega após o despacho"
+                  "title": "Prazo de entrega (dias)",
+                  "description": "Número de dias estimado para entrega após o despacho"
                 },
                 "working_days": {
                   "type": "boolean",

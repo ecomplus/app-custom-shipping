@@ -157,7 +157,7 @@
               "minimum": 0,
               "maximum": 999999,
               "title": "Peso máximo",
-              "description": "Peso cúbico ((C x L x A) / 6.000) máximo em Kg"
+              "description": "Peso cúbico (C x L x A / 6.000) máximo em Kg"
             },
             "delivery_time": {
               "title": "Prazo de entrega",

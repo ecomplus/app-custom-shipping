@@ -23,8 +23,9 @@ module.exports = appSdk => {
     }
 
     const destinationZip = params.to ? params.to.zip.replace(/\D/g, '') : ''
-    const originZip = params.from ? params.from.zip.replace(/\D/g, '')
-      : config.zip ? config.zip.replace(/\D/g, '') : ''
+    let originZip = params.from
+      ? params.from.zip
+      : config.zip ? config.zip : ''
 
     const checkZipCode = rule => {
       // validate rule zip range
@@ -35,7 +36,7 @@ module.exports = appSdk => {
       return true
     }
 
-    // search for configured free shipping rule
+    // search for configured free shipping rule and origin zip by rule
     for (let i = 0; i < shippingRules.length; i++) {
       const rule = shippingRules[i]
       if (
@@ -45,9 +46,14 @@ module.exports = appSdk => {
         !(rule.excedent_weight_cost > 0) &&
         !(rule.amount_tax > 0)
       ) {
+        if (!originZip && rule.from && rule.from.zip) {
+          originZip = rule.from.zip
+        }
         if (!rule.min_amount) {
           response.free_shipping_from_value = 0
-          break
+          if (originZip) {
+            break
+          }
         } else if (!(response.free_shipping_from_value <= rule.min_amount)) {
           response.free_shipping_from_value = rule.min_amount
         }
@@ -68,6 +74,8 @@ module.exports = appSdk => {
         error: 'CALCULATE_ERR',
         message: 'Zip code is unset on app hidden data (merchant must configure the app)'
       })
+    } else if (typeof originZip === 'string') {
+      originZip = originZip.replace(/\D/g, '')
     }
 
     // calculate weight and pkg value from items list
@@ -174,6 +182,7 @@ module.exports = appSdk => {
         for (const serviceCode in shippingRulesByCode) {
           const rule = shippingRulesByCode[serviceCode]
           if (rule) {
+            let { label } = rule
             // delete filter properties from rule object
             delete rule.service_code
             delete rule.zip_range
@@ -181,18 +190,28 @@ module.exports = appSdk => {
             delete rule.max_cubic_weight
             delete rule.excedent_weight_cost
             delete rule.amount_tax
+            delete rule.label
+
             // also try to find corresponding service object from config
             let service
             if (Array.isArray(config.services)) {
               service = config.services.find(service => service.service_code === serviceCode)
+              if (!label) {
+                label = service.label
+              }
+            }
+            if (!label) {
+              label = serviceCode
             }
 
             response.shipping_services.push({
-              label: serviceCode,
               // label, service_code, carrier (and maybe more) from service object
               ...service,
+              service_code: serviceCode,
+              label,
               shipping_line: {
                 from: {
+                  ...rule.from,
                   ...params.from,
                   zip: originZip
                 },
@@ -208,7 +227,8 @@ module.exports = appSdk => {
                 },
                 posting_deadline: {
                   days: 0,
-                  ...config.posting_deadline
+                  ...config.posting_deadline,
+                  ...rule.posting_deadline
                 }
               }
             })

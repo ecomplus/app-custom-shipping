@@ -55,7 +55,7 @@
             "service_code": {
               "type": "string",
               "maxLength": 10,
-              "pattern": "^\S+$",
+              "pattern": "^[A-Za-z0-9-_.]+$",
               "title": "Código do serviço"
             }
           }
@@ -121,7 +121,7 @@
             "service_code": {
               "type": "string",
               "maxLength": 10,
-              "pattern": "^\S+$",
+              "pattern": "^[A-Za-z0-9-_.]+$",
               "title": "Código do serviço"
             },
             "zip_range": {

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/ecomplus/app-custom-shipping/compare/v1.2.3...v1.3.0) (2021-06-14)
+
+
+### Features
+
+* **calculate-shipping:** retrieving more fields (zip, label...) from shipping rule ([36ca268](https://github.com/ecomplus/app-custom-shipping/commit/36ca26875238cec7020c9d591e74e45dca78336d))
+
 ### [1.2.3](https://github.com/ecomplus/app-custom-shipping/compare/v1.2.2...v1.2.3) (2021-06-08)
 
 ### [1.2.2](https://github.com/ecomplus/app-custom-shipping/compare/v1.2.1...v1.2.2) (2021-01-12)

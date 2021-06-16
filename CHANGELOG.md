@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.1](https://github.com/ecomplus/app-custom-shipping/compare/v1.3.0...v1.3.1) (2021-06-16)
+
+
+### Bug Fixes
+
+* **calculate-shipping:** prevent errors with undefined service by code ([020f082](https://github.com/ecomplus/app-custom-shipping/commit/020f08292f74b64e44a54241830b6e148b4b9047))
+
 ## [1.3.0](https://github.com/ecomplus/app-custom-shipping/compare/v1.2.3...v1.3.0) (2021-06-14)
 
 

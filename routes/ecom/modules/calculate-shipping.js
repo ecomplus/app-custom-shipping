@@ -195,8 +195,10 @@ module.exports = appSdk => {
             // also try to find corresponding service object from config
             let service
             if (Array.isArray(config.services)) {
-              service = config.services.find(service => service.service_code === serviceCode)
-              if (!label) {
+              service = config.services.find(service => {
+                return service && service.service_code === serviceCode
+              })
+              if (service && !label) {
                 label = service.label
               }
             }

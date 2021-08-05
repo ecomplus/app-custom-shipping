@@ -80,8 +80,6 @@ module.exports = appSdk => {
           message: 'Zip code is unset on app hidden data (merchant must configure the app)'
         })
       }
-    } else if (typeof originZip === 'string') {
-      originZip = originZip.replace(/\D/g, '')
     }
 
     // calculate weight and pkg value from items list
@@ -221,7 +219,7 @@ module.exports = appSdk => {
                 from: {
                   ...rule.from,
                   ...params.from,
-                  zip: originZip
+                  zip: String((rule.from && rule.from.zip) || originZip).replace(/\D/g, '')
                 },
                 to: params.to,
                 price: 0,

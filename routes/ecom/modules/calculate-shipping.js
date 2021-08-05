@@ -70,10 +70,16 @@ module.exports = appSdk => {
 
     if (!originZip) {
       // must have configured origin zip code to continue
-      return res.status(400).send({
-        error: 'CALCULATE_ERR',
-        message: 'Zip code is unset on app hidden data (merchant must configure the app)'
-      })
+      const rule = shippingRules.find(rule => Boolean(checkZipCode(rule) && rule.from && rule.from.zip))
+      if (rule) {
+        originZip = rule.from.zip
+      }
+      if (!originZip) {
+        return res.status(400).send({
+          error: 'CALCULATE_ERR',
+          message: 'Zip code is unset on app hidden data (merchant must configure the app)'
+        })
+      }
     } else if (typeof originZip === 'string') {
       originZip = originZip.replace(/\D/g, '')
     }

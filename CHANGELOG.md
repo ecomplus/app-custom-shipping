@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.4](https://github.com/ecomplus/app-custom-shipping/compare/v1.3.3...v1.3.4) (2021-10-21)
+
+
+### Bug Fixes
+
+* **deps:** update @ecomplus/application-sdk to v1.15.5 sqlite ([c69d73e](https://github.com/ecomplus/app-custom-shipping/commit/c69d73ed53fca8c5fa7486c93dee34639585c916))
+
 ### [1.3.3](https://github.com/ecomplus/app-custom-shipping/compare/v1.3.2...v1.3.3) (2021-08-05)
 
 

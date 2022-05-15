@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.5](https://github.com/ecomplus/app-custom-shipping/compare/v1.3.4...v1.3.5) (2022-05-15)
+
+
+### Bug Fixes
+
+* use phisical weight when cubic (dimensions) lower than 5 ([#7](https://github.com/ecomplus/app-custom-shipping/issues/7)) ([653440c](https://github.com/ecomplus/app-custom-shipping/commit/653440c90953a01399f7289b6607ab4bac585e3f))
+
 ### [1.3.4](https://github.com/ecomplus/app-custom-shipping/compare/v1.3.3...v1.3.4) (2021-10-21)
 
 

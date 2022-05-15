@@ -141,11 +141,11 @@ module.exports = appSdk => {
               cubicWeight *= sumDimensions[side]
             }
           }
-          if (cubicWeight > 1) {
+          if (cubicWeight > 0) {
             cubicWeight /= 6000
           }
         }
-        finalWeight += (quantity * (physicalWeight > cubicWeight ? physicalWeight : cubicWeight))
+        finalWeight += (quantity * (cubicWeight < 5 || physicalWeight > cubicWeight ? physicalWeight : cubicWeight))
       })
 
       // start filtering shipping rules

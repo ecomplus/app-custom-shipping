@@ -211,7 +211,7 @@
               "description": "Adicional/desconto percentual sobre o valor subtotal da compra"
             },
             "delivery_instructions": {
-              "type": "text",
+              "type": "string",
               "maxLength": 1000,
               "title": "Instruçoes de entrega",
               "description": "Insira informações detalhadas para seu cliente retirar o pedido"

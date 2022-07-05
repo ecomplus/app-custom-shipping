@@ -214,7 +214,7 @@
               "type": "string",
               "maxLength": 1000,
               "title": "Instruçoes de entrega",
-              "description": "Insira informações detalhadas para seu cliente retirar o pedido"
+              "description": "Insira informações adicionais para retirada ou entrega do pedido"
             }
           }
         }

@@ -217,7 +217,7 @@
               "description": "Insira informações adicionais para retirada ou entrega do pedido"
             },
             "product_ids": {
-              "title": "Lista de produtos para frete grátis",
+              "title": "Produtos com frete grátis",
               "description": "Se preenchido, será dado frete grátis",
               "type": "array",
               "items": {

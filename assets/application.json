@@ -215,7 +215,17 @@
               "maxLength": 1000,
               "title": "Instruçoes de entrega",
               "description": "Insira informações adicionais para retirada ou entrega do pedido"
-            }
+            },
+            "product_ids": {
+              "title": "Lista de produtos para frete grátis",
+              "description": "Se preenchido, será dado frete grátis",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{24}$",
+                "title": "ID do produto"
+              }
+            }           
           }
         }
       },

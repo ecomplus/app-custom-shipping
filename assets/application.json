@@ -218,7 +218,7 @@
             },
             "product_ids": {
               "title": "Produtos com frete grátis",
-              "description": "Se preenchido, será dado frete grátis",
+              "description": "Será aplicado frete grátis se algum dos produtos especificados estiver no carrinho",
               "type": "array",
               "items": {
                 "type": "string",

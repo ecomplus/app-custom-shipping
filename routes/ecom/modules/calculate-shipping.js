@@ -24,16 +24,13 @@ module.exports = appSdk => {
 
     if (Array.isArray(config.services) && config.services.length) {
       const { services } = config
-      const newShippingRules = shippingRules.map(rule => {
-        const foundService = services.find(service => service.service_code === rule.service_code)
-        if (foundService) {
-          ['free_shipping_all', 'product_ids'].forEach(prop => {
-            rule[prop] = foundService[prop]
-          })
+      shippingRules.forEach(rule => {
+        const service = services.find(service => service.service_code === rule.service_code)
+        if (service) {
+          rule.free_shipping_all = service.free_shipping_all
+          rule.product_ids = service.product_ids
         }
-        return rule
       })
-      shippingRules = newShippingRules
     }
     const destinationZip = params.to ? params.to.zip.replace(/\D/g, '') : ''
     let originZip = params.from

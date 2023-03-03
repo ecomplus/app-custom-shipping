@@ -216,7 +216,7 @@
               "title": "Instruçoes de entrega",
               "description": "Insira informações adicionais para retirada ou entrega do pedido"
             },
-            "free_shipping_all": {
+            "all_product_ids": {
               "type": "boolean",
               "title": "Ativar frete grátis para todos itens da lista",
               "description": "Será aplicado frete grátis se apenas estiver os produtos especificados no carrinho",

@@ -153,8 +153,8 @@ module.exports = appSdk => {
         if (typeof rule === 'object' && rule) {
           let hasProduct
           if (Array.isArray(rule.product_ids) && rule.product_ids.length) {
-            const isFreeShippingAll = rule.free_shipping_all
-            hasProduct = isFreeShippingAll
+            const isAllProducts = rule.all_product_ids
+            hasProduct = isAllProducts
               ? params.items.every(item => rule.product_ids.indexOf(item.product_id) > -1)
               : params.items.some(item => rule.product_ids.indexOf(item.product_id) > -1)
           }

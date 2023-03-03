@@ -216,14 +216,8 @@
               "title": "Instruçoes de entrega",
               "description": "Insira informações adicionais para retirada ou entrega do pedido"
             },
-            "all_product_ids": {
-              "type": "boolean",
-              "title": "Ativar frete grátis para todos itens da lista",
-              "description": "Será aplicado frete grátis se apenas estiver os produtos especificados no carrinho",
-              "default": false
-            },
             "product_ids": {
-              "title": "Produtos com frete grátis",
+              "title": "Lista de produtos para frete grátis",
               "description": "Será aplicado frete grátis se algum dos produtos especificados estiver no carrinho",
               "type": "array",
               "items": {
@@ -231,7 +225,13 @@
                 "pattern": "^[a-f0-9]{24}$",
                 "title": "ID do produto"
               }
-            }           
+            },
+            "all_product_ids": {
+              "type": "boolean",
+              "title": "Ativar frete grátis para todos itens da lista",
+              "description": "Será aplicado frete grátis se apenas estiver os produtos especificados no carrinho",
+              "default": false
+            },           
           }
         }
       },

@@ -21,17 +21,7 @@ module.exports = appSdk => {
       res.send(response)
       return
     }
-
-    if (Array.isArray(config.services) && config.services.length) {
-      const { services } = config
-      shippingRules.forEach(rule => {
-        const service = services.find(service => service.service_code === rule.service_code)
-        if (service) {
-          rule.free_shipping_all = service.free_shipping_all
-          rule.product_ids = service.product_ids
-        }
-      })
-    }
+    
     const destinationZip = params.to ? params.to.zip.replace(/\D/g, '') : ''
     let originZip = params.from
       ? params.from.zip
@@ -161,8 +151,16 @@ module.exports = appSdk => {
       // start filtering shipping rules
       const validShippingRules = shippingRules.filter(rule => {
         if (typeof rule === 'object' && rule) {
+          let hasProduct
+          if (Array.isArray(rule.product_ids) && rule.product_ids.length) {
+            const isFreeShippingAll = rule.free_shipping_all
+            hasProduct = isFreeShippingAll
+              ? params.items.every(item => rule.product_ids.indexOf(item.product_id) > -1)
+              : params.items.some(item => rule.product_ids.indexOf(item.product_id) > -1)
+          }
           return (!params.service_code || params.service_code === rule.service_code) &&
             checkZipCode(rule) &&
+            (!rule.product_ids || hasProduct) &&
             (!rule.min_amount || amount >= rule.min_amount) &&
             (!rule.max_cubic_weight || rule.excedent_weight_cost > 0 || finalWeight <= rule.max_cubic_weight)
         }
@@ -183,12 +181,6 @@ module.exports = appSdk => {
           }
           if (typeof rule.amount_tax === 'number' && !isNaN(rule.amount_tax)) {
             rule.total_price += (rule.amount_tax * amount / 100)
-          }
-          if (Array.isArray(rule.product_ids) && rule.product_ids.length) {
-            const hasProduct = params.items.some(item => rule.product_ids.indexOf(item.product_id) > -1)
-            if (hasProduct) {
-              rule.total_price = 0
-            }
           }
           const serviceCode = rule.service_code
           const currentShippingRule = shippingRulesByCode[serviceCode]

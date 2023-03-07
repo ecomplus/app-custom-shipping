@@ -217,8 +217,8 @@
               "description": "Insira informações adicionais para retirada ou entrega do pedido"
             },
             "product_ids": {
-              "title": "Lista de produtos para frete grátis",
-              "description": "Será aplicado frete grátis se algum dos produtos especificados estiver no carrinho",
+              "title": "Lista de produtos selecionados",
+              "description": "Se preenchido, será dado frete grátis se houver um dos itens no carrinho",
               "type": "array",
               "items": {
                 "type": "string",
@@ -229,7 +229,7 @@
             "all_product_ids": {
               "type": "boolean",
               "title": "Ativar frete grátis para todos itens da lista",
-              "description": "Será aplicado frete grátis se apenas estiver os produtos especificados no carrinho",
+              "description": "Se ativo, será aplicado frete grátis apenas para a lista de produtos no carrinho",
               "default": false
             },           
           }

@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/ecomplus/app-custom-shipping/compare/v1.3.6...v1.4.0) (2023-03-08)
+
+
+### Features
+
+* **calculate-shipping:** free shipping option by product ([#9](https://github.com/ecomplus/app-custom-shipping/issues/9)) ([#10](https://github.com/ecomplus/app-custom-shipping/issues/10)) ([77339db](https://github.com/ecomplus/app-custom-shipping/commit/77339db70e9de76a353d24bd64415beca70bdf12))
+
+
+### Bug Fixes
+
+* **application:** removing invalid JSON trailing comma ([4c1667c](https://github.com/ecomplus/app-custom-shipping/commit/4c1667c6dd66ceb55eee37efde1e0dffdd4f9d6a))
+
 ### [1.3.6](https://github.com/ecomplus/app-custom-shipping/compare/v1.3.5...v1.3.6) (2022-07-05)
 
 ### [1.3.5](https://github.com/ecomplus/app-custom-shipping/compare/v1.3.4...v1.3.5) (2022-05-15)

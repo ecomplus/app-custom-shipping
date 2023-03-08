@@ -229,7 +229,7 @@
             "all_product_ids": {
               "type": "boolean",
               "title": "Checar todos os produtos",
-              "description": "Se ativo, a regra será disponibilizada apenas se todos os produtos selecionados estiverem no carrinho",
+              "description": "Se ativo, a regra será disponibilizada apenas se todos os itens do carrinho estiverem na lista de produtos selecionados",
               "default": false
             },           
           }

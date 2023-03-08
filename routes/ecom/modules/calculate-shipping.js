@@ -21,7 +21,7 @@ module.exports = appSdk => {
       res.send(response)
       return
     }
-
+    
     const destinationZip = params.to ? params.to.zip.replace(/\D/g, '') : ''
     let originZip = params.from
       ? params.from.zip
@@ -151,8 +151,16 @@ module.exports = appSdk => {
       // start filtering shipping rules
       const validShippingRules = shippingRules.filter(rule => {
         if (typeof rule === 'object' && rule) {
+          let hasProduct
+          if (Array.isArray(rule.product_ids) && rule.product_ids.length) {
+            const isAllProducts = rule.all_product_ids
+            hasProduct = isAllProducts
+              ? params.items.every(item => rule.product_ids.indexOf(item.product_id) > -1)
+              : params.items.some(item => rule.product_ids.indexOf(item.product_id) > -1)
+          }
           return (!params.service_code || params.service_code === rule.service_code) &&
             checkZipCode(rule) &&
+            (!rule.product_ids || hasProduct) &&
             (!rule.min_amount || amount >= rule.min_amount) &&
             (!rule.max_cubic_weight || rule.excedent_weight_cost > 0 || finalWeight <= rule.max_cubic_weight)
         }

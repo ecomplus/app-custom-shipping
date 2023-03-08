@@ -218,7 +218,7 @@
             },
             "product_ids": {
               "title": "Lista de produtos selecionados",
-              "description": "Se preenchido, a regra de envio estará disponível apenas se pelo menos um dos itens estiver no carrinho",
+              "description": "Se preenchido, a regra de envio estará disponível apenas se pelo menos um destes produtos estiver no carrinho",
               "type": "array",
               "items": {
                 "type": "string",

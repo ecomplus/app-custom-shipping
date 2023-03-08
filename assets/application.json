@@ -218,7 +218,7 @@
             },
             "product_ids": {
               "title": "Lista de produtos selecionados",
-              "description": "Se preenchido, será dado frete grátis se houver um dos itens no carrinho",
+              "description": "Se preenchido, a condição será efetivada com qualquer item da lista no carrinho",
               "type": "array",
               "items": {
                 "type": "string",
@@ -228,8 +228,8 @@
             },
             "all_product_ids": {
               "type": "boolean",
-              "title": "Ativar frete grátis para todos itens da lista",
-              "description": "Se ativo, será aplicado frete grátis apenas para a lista de produtos no carrinho",
+              "title": "Ativar condição para todos itens da lista",
+              "description": "Se ativo, será aplicado a condição configurada apenas para a lista de produtos no carrinho",
               "default": false
             },           
           }

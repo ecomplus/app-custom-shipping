@@ -144,6 +144,9 @@ module.exports = appSdk => {
           if (cubicWeight > 0) {
             cubicWeight /= 6000
           }
+          if (rule.max_weight) {
+            cubicWeight = physicalWeight
+          }
         }
         finalWeight += (quantity * (cubicWeight < 5 || physicalWeight > cubicWeight ? physicalWeight : cubicWeight))
       })

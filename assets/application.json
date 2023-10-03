@@ -159,11 +159,10 @@
               "title": "Peso máximo",
               "description": "Peso cúbico (C x L x A / 6.000) máximo em Kg"
             },
-            "max_weight": {
+            "no_cubic_weight": {
               "type": "boolean",
               "default": "false",
-              "title": "Habilitar peso máximo (soma de pesos)",
-              "description": "Habilitar soma de peso máximo em Kg"
+              "title": "Desabilitar cálculo de peso cúbico"
             },
             "delivery_time": {
               "title": "Prazo de entrega",

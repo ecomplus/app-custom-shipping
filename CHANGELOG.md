@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.1](https://github.com/ecomplus/app-custom-shipping/compare/v1.5.0...v1.5.1) (2023-10-03)
+
+
+### Bug Fixes
+
+* **calculate-shipping:** prevent error with undefined `rule` when checking `no_cubic_weight` option ([#12](https://github.com/ecomplus/app-custom-shipping/issues/12)) ([8e8bde1](https://github.com/ecomplus/app-custom-shipping/commit/8e8bde14b0796753bac7b0f36fcab3728540fab2))
+
 ## [1.5.0](https://github.com/ecomplus/app-custom-shipping/compare/v1.4.0...v1.5.0) (2023-10-03)
 
 

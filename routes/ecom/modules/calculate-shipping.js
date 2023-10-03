@@ -133,7 +133,7 @@ module.exports = appSdk => {
             }
           }
 
-          if (!rule.no_cubic_weight) {
+          if (!config.no_cubic_weight) {
             // calculate cubic weight
             // https://suporte.boxloja.pro/article/82-correios-calculo-frete
             // (C x L x A) / 6.000

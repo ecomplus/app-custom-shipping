@@ -29,6 +29,14 @@
       },
       "hide": true
     },
+    "no_cubic_weight": {
+      "schema": {
+        "type": "boolean",
+        "default": "false",
+        "title": "Desabilitar cálculo de peso cúbico"
+      },
+      "hide": true
+    },
     "services": {
       "schema": {
         "title": "Serviços de entrega personalizados",
@@ -158,11 +166,6 @@
               "maximum": 999999,
               "title": "Peso máximo",
               "description": "Peso cúbico (C x L x A / 6.000) máximo em Kg"
-            },
-            "no_cubic_weight": {
-              "type": "boolean",
-              "default": "false",
-              "title": "Desabilitar cálculo de peso cúbico"
             },
             "delivery_time": {
               "title": "Prazo de entrega",

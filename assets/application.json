@@ -30,9 +30,12 @@
       "hide": true
     },
     "no_cubic_weight": {
-      "type": "boolean",
-      "default": "false",
-      "title": "Desabilitar cálculo de peso cúbico"
+      "schema": {
+        "type": "boolean",
+        "default": "false",
+        "title": "Desabilitar cálculo de peso cúbico"
+      },
+      "hide": true
     },
     "services": {
       "schema": {

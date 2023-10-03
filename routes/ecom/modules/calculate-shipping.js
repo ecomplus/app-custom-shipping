@@ -133,16 +133,18 @@ module.exports = appSdk => {
             }
           }
 
-          // calculate cubic weight
-          // https://suporte.boxloja.pro/article/82-correios-calculo-frete
-          // (C x L x A) / 6.000
-          for (const side in sumDimensions) {
-            if (sumDimensions[side]) {
-              cubicWeight *= sumDimensions[side]
+          if (!rule.no_cubic_weight) {
+            // calculate cubic weight
+            // https://suporte.boxloja.pro/article/82-correios-calculo-frete
+            // (C x L x A) / 6.000
+            for (const side in sumDimensions) {
+              if (sumDimensions[side]) {
+                cubicWeight *= sumDimensions[side]
+              }
             }
-          }
-          if (cubicWeight > 0) {
-            cubicWeight /= 6000
+            if (cubicWeight > 0) {
+              cubicWeight /= 6000
+            }
           }
         }
         finalWeight += (quantity * (cubicWeight < 5 || physicalWeight > cubicWeight ? physicalWeight : cubicWeight))

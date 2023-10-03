@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/ecomplus/app-custom-shipping/compare/v1.4.0...v1.5.0) (2023-10-03)
+
+
+### Features
+
+* **calculate-shipping:** add option to consider only physical weight ([#11](https://github.com/ecomplus/app-custom-shipping/issues/11)) ([ed24b01](https://github.com/ecomplus/app-custom-shipping/commit/ed24b01ac571382a1636e0e410de9db1d0d39989))
+
 ## [1.4.0](https://github.com/ecomplus/app-custom-shipping/compare/v1.3.6...v1.4.0) (2023-03-08)
 
 

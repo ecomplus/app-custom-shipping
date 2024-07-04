@@ -65,6 +65,12 @@
               "maxLength": 10,
               "pattern": "^[A-Za-z0-9-_.]+$",
               "title": "Código do serviço"
+            },
+            "carrier_doc_number": {
+              "type": "string",
+              "maxLength": 14,
+              "title": "CNPJ da transportadora",
+              "description": "Insira apenas números do CNPJ"
             }
           }
         }

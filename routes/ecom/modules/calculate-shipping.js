@@ -21,12 +21,8 @@ module.exports = appSdk => {
       res.send(response)
       return
     }
-    
-    const destinationZip = params.to ? params.to.zip.replace(/\D/g, '') : ''
-    let originZip = params.from
-      ? params.from.zip
-      : config.zip ? config.zip : ''
 
+    const destinationZip = params.to ? params.to.zip.replace(/\D/g, '') : ''
     const checkZipCode = rule => {
       // validate rule zip range
       if (destinationZip && rule.zip_range) {
@@ -34,6 +30,34 @@ module.exports = appSdk => {
         return Boolean((!min || destinationZip >= min) && (!max || destinationZip <= max))
       }
       return true
+    }
+
+    let originZip, warehouseCode
+    let postingDeadline = config.posting_deadline
+    if (params.from) {
+      originZip = params.from.zip
+    } else if (Array.isArray(config.warehouses) && config.warehouses.length) {
+      for (let i = 0; i < config.warehouses.length; i++) {
+        const warehouse = config.warehouses[i]
+        if (warehouse?.zip && checkZipCode(warehouse)) {
+          const { code } = warehouse
+          if (!code) continue
+          if (params.items) {
+            const itemNotOnWarehouse = params.items.find(({ quantity, inventory }) => {
+              return inventory && Object.keys(inventory).length && !(inventory[code] >= quantity)
+            })
+            if (itemNotOnWarehouse) continue
+          }
+          originZip = warehouse.zip
+          if (warehouse.posting_deadline?.days) {
+            postingDeadline = warehouse.posting_deadline
+          }
+          warehouseCode = code
+        }
+      }
+    }
+    if (!originZip) {
+      originZip = config.zip
     }
 
     // search for configured free shipping rule and origin zip by rule
@@ -243,9 +267,10 @@ module.exports = appSdk => {
                 },
                 posting_deadline: {
                   days: 0,
-                  ...config.posting_deadline,
+                  ...postingDeadline,
                   ...rule.posting_deadline
-                }
+                },
+                warehouse_code: warehouseCode
               }
             })
           }

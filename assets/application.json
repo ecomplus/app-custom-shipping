@@ -261,21 +261,23 @@
           "title": "Centro de distribuição",
           "type": "object",
           "required": [
+            "service_code",
+            "code",
             "zip"
           ],
           "additionalProperties": false,
           "properties": {
+            "service_code": {
+              "type": "string",
+              "maxLength": 10,
+              "pattern": "^[A-Za-z0-9-_.]+$",
+              "title": "Código do serviço"
+            },
             "code": {
               "type": "string",
               "maxLength": 30,
               "pattern": "^[A-Za-z0-9-_]{2,30}$",
               "title": "Código do CD"
-            },
-            "doc": {
-              "type": "string",
-              "maxLength": 255,
-              "title": "Documento da filial",
-              "description": "CNPJ da filial associado"
             },
             "zip": {
               "type": "string",

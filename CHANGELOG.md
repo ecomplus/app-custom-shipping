@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.1](https://github.com/ecomplus/app-custom-shipping/compare/v1.6.0...v1.6.1) (2025-02-14)
+
+
+### Bug Fixes
+
+* node compat ([54d8839](https://github.com/ecomplus/app-custom-shipping/commit/54d88396c65e7f68a2079ce72744d642a0b82aba))
+
 ## [1.6.0](https://github.com/ecomplus/app-custom-shipping/compare/v1.5.1...v1.6.0) (2025-02-13)
 
 

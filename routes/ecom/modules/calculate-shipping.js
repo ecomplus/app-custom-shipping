@@ -39,7 +39,7 @@ module.exports = appSdk => {
     } else if (Array.isArray(config.warehouses) && config.warehouses.length) {
       for (let i = 0; i < config.warehouses.length; i++) {
         const warehouse = config.warehouses[i]
-        if (warehouse?.zip && checkZipCode(warehouse)) {
+        if (warehouse && warehouse.zip && checkZipCode(warehouse)) {
           const { code } = warehouse
           if (!code) continue
           if (params.items) {
@@ -49,7 +49,7 @@ module.exports = appSdk => {
             if (itemNotOnWarehouse) continue
           }
           originZip = warehouse.zip
-          if (warehouse.posting_deadline?.days) {
+          if (warehouse.posting_deadline && warehouse.posting_deadline.days) {
             postingDeadline = warehouse.posting_deadline
           }
           warehouseCode = code

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/ecomplus/app-custom-shipping/compare/v1.6.1...v1.7.0) (2025-03-28)
+
+
+### Features
+
+* delivery "default" delivery time and total price from services ([08461e9](https://github.com/ecomplus/app-custom-shipping/commit/08461e9295fc3f1f2eae96a5df1a9e0bf93eb393))
+
 ### [1.6.1](https://github.com/ecomplus/app-custom-shipping/compare/v1.6.0...v1.6.1) (2025-02-14)
 
 

@@ -3,7 +3,7 @@
   "state": "active",
   "title": "Frete personalizado",
   "slug": "customshipping",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "type": "external",
   "authentication": true,
   "auth_callback_uri": "https://customshipping.ecomplus.biz/ecom/auth-callback",
@@ -71,6 +71,37 @@
               "maxLength": 14,
               "title": "CNPJ da transportadora",
               "description": "Insira apenas números do CNPJ"
+            },
+            "delivery_time": {
+              "title": "Prazo de entrega padrão do serviço",
+              "type": "object",
+              "required": [
+                "days"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "days": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 999999,
+                  "default": 20,
+                  "title": "Prazo de entrega (dias)",
+                  "description": "Número de dias estimado para entrega após o despacho"
+                },
+                "working_days": {
+                  "type": "boolean",
+                  "default": true,
+                  "title": "Dias úteis",
+                  "description": "Se o prazo é calculado em dias úteis"
+                }
+              }
+            },
+            "total_price": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 9999999999,
+              "title": "Preço padrão do serviço",
+              "description": "Valor do frete com possíveis taxas e adicionais fixos"
             }
           }
         }
@@ -127,9 +158,7 @@
           "title": "Regra de envio",
           "type": "object",
           "required": [
-            "service_code",
-            "delivery_time",
-            "total_price"
+            "service_code"
           ],
           "properties": {
             "service_code": {
@@ -142,8 +171,7 @@
               "title": "Faixa de CEP atendida",
               "type": "object",
               "required": [
-                "min",
-                "max"
+                "min"
               ],
               "properties": {
                 "min": {

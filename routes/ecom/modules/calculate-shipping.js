@@ -23,11 +23,19 @@ module.exports = appSdk => {
     }
 
     const destinationZip = params.to ? params.to.zip.replace(/\D/g, '') : ''
-    const checkZipCode = rule => {
-      // validate rule zip range
+    const checkZipCode = (rule) => {
       if (destinationZip && rule.zip_range) {
         const { min, max } = rule.zip_range
-        return Boolean((!min || destinationZip >= min) && (!max || destinationZip <= max))
+        if (!min && !max) {
+          return true
+        }
+        if (!max) {
+          return destinationZip === min
+        }
+        if (!min) {
+          return destinationZip === max
+        }
+        return destinationZip >= min && destinationZip <= max
       }
       return true
     }
@@ -196,8 +204,15 @@ module.exports = appSdk => {
       if (validShippingRules.length) {
         // group by service code selecting lower price
         const shippingRulesByCode = validShippingRules.reduce((shippingRulesByCode, rule) => {
+          const serviceCode = rule.service_code
           if (typeof rule.total_price !== 'number') {
-            rule.total_price = 0
+            let service
+            if (Array.isArray(config.services)) {
+              service = config.services.find((_service) => {
+                return _service && _service.service_code === serviceCode
+              })
+            }
+            rule.total_price = (service && service.total_price) || 0
           }
           if (typeof rule.price !== 'number') {
             rule.price = rule.total_price
@@ -208,7 +223,6 @@ module.exports = appSdk => {
           if (typeof rule.amount_tax === 'number' && !isNaN(rule.amount_tax)) {
             rule.total_price += (rule.amount_tax * amount / 100)
           }
-          const serviceCode = rule.service_code
           const currentShippingRule = shippingRulesByCode[serviceCode]
           if (!currentShippingRule || currentShippingRule.total_price > rule.total_price) {
             shippingRulesByCode[serviceCode] = rule
@@ -236,8 +250,15 @@ module.exports = appSdk => {
               service = config.services.find(service => {
                 return service && service.service_code === serviceCode
               })
-              if (service && !label) {
-                label = service.label
+              if (service) {
+                if (!label) {
+                  label = service.label
+                }
+                if (!rule.delivery_time || typeof rule.delivery_time.days !== 'number') {
+                  rule.delivery_time = service.delivery_time
+                }
+                delete service.delivery_time
+                delete service.total_price
               }
             }
             if (!label) {
